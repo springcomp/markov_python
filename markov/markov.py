@@ -92,4 +92,31 @@ def forecast_next_change(state):
     return next
 
 def select_transition(transitions):
-    return chain.Chain._randomProbabilitySelector(transitions)
+    # by default a Markov chain will apply
+    # weighted random selection of the next transition
+    # using the default algorithm or by using a custom
+    # selector like the following commented line:
+    #
+    #return chain.Chain._randomProbabilitySelector(transitions)
+
+    # instead, we need to take into account the state of the world
+    # some transitions might not be possible in the current state
+    # some those must be eliminated from the set of transitions
+    # and the remaining probabilities updated accordingly
+
+    print('>> {}'.format(transitions))
+
+    transitions.pop('000')
+    updated_transition_with_probabilities = \
+        _rebalance_probabilities(transitions)
+
+    print('<< {}'.format(updated_transition_with_probabilities))
+
+    return chain.Chain._randomProbabilitySelector(updated_transition_with_probabilities)
+
+
+def _rebalance_probabilities(transitions):
+    collection = list(transitions.items())
+    remaining = sum(item[1] for item in collection)
+    updated = [(item[0], item[1]/remaining) for item in collection]
+    return dict(updated)
