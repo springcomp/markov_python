@@ -10,9 +10,10 @@ class Chain(graph.Graph):
 		self._selector = Chain._randomProbabilitySelector
 		None
 
-	def getNextState(self, state):
+	def getNextState(self, state, selector = None):
+		useSelector = selector if selector != None else self._selector
 		transitions = self.getTransitions(state)
-		transition = self._selector(transitions)
+		transition = useSelector(transitions)
 		return transition
 
 	@staticmethod
