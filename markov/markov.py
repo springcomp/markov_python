@@ -135,8 +135,7 @@ class ShipCourse:
         self.O = initB  # y coordinate
         self._recalc_neighbourhood()
 
-    def forecast(self, ndays):
-        courseToday = '090'
+    def forecast(self, ndays, courseToday = '090'):
 
         print("Start state: " + courseToday)
         print("Initial position: ({}, {})".format(self.A, self.O))
