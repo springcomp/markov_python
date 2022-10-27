@@ -94,17 +94,16 @@ def _dir(state):
 class ShipCourse:
     def __init__(self, initA = 7, initB = 30):
         self._pos = (initA, initB) # x coordinate, y coordinate
-        self._recalc_neighbourhood()
 
     def forecast(self, ndays, courseToday = '090'):
 
-        print("Initial status: {} {}".format(self._pos, _dir(courseToday)))
+        posInit = self._pos
 
         courseList = self.calc_forecast(courseToday, ndays)
 
-        print("Possible states: " + str(courseList))
-        print("End state after {} days: {}".format(ndays, courseList[ndays - 1]))
-        print("End position: {}".format(self._pos))
+        print("Initial status: {} {}".format(posInit, _dir(courseToday)))
+        print("Courses taken: {}".format([_dir(course) for course in courseList]))
+        print("End status after {} days: {} {}".format(ndays, _dir(courseList[ndays - 1]), self._pos))
 
 
     def calc_forecast(self, initial_course, ndays):
@@ -119,13 +118,11 @@ class ShipCourse:
             courses.append(next)
 
             self._recalc_position(next)
-            self._recalc_neighbourhood()
 
             print('<< course_change[{}]: {} {}'.format(nday, _dir(next), self._pos))
             print('')
 
         return courses
-
 
     def forecast_next_change(self, state):
         next = c.getNextState(state, self.select_transition)
@@ -155,12 +152,6 @@ class ShipCourse:
 
         return chain.Chain._randomProbabilitySelector(updated_transitions_with_probabilities)
     
-    def _recalc_neighbourhood(self):
-        self.B = self._pos[0] - 1 # Sud
-        self.C = self._pos[0] + 1  # Nord
-        self.M = self._pos[1] - 1  # West
-        self.N = self._pos[1] + 1  # East
-
     def _pop_impossible_transitions(self, transitions):
 
         x = self._pos[0]
