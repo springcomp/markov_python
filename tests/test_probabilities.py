@@ -15,7 +15,7 @@ class TestProbabilities(unittest.TestCase):
 			'B': 0.3,
 		}
 
-		transitions = markov._rebalance_probabilities(transitions)
+		transitions = markov.ShipCourse._rebalance_probabilities(transitions)
 
 		self.assertEqual(
 			transitions,
